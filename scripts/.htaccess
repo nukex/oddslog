@@ -1,0 +1,7 @@
+AddDefaultCharset utf-8
+RewriteEngine on
+RewriteRule ^captcha.jpg(/?)+$ captcha/captcha.php [L]
+
+<IfModule mod_headers.c>    
+    Header set Access-Control-Allow-Origin *
+</IfModule>
