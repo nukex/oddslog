@@ -6,3 +6,4 @@ public/BingSiteAuth.xml
 scripts/tmpdb.txt
 scripts/tmp/*
 scripts/updateInfo.php
+git-pull.php
