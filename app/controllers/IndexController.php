@@ -121,8 +121,8 @@ class IndexController extends ControllerBase
         ];
 
         $this->setMetadata([    
-            'title'     => (isset($pastDate) ? $date .' - Match Results - OddsLogs.com ' :  //date title
-                         "OddsLogs.com -  In-play Odds Archive & Live Statistics" )      //index title
+            'title'     => (isset($pastDate) ? $date .' - Match Results - OddsLog.com ' :  //date title
+                         "OddsLog.com -  In-play Odds Archive & Live Statistics" )      //index title
                          .($page>1 ? ' - '. $page: '' ) ,
 
             'desc'      =>  (isset($pastDate) ? $date .' matches archived results' :  
@@ -141,7 +141,7 @@ class IndexController extends ControllerBase
         $matchs  = Matchs::liveMatchs($date);
         
         $this->setMetadata([
-            'title'     => "OddsLogs.com - Live Matchs In-play Odds" ,
+            'title'     => "OddsLog.com - Live Matchs In-play Odds" ,
             'desc'      =>  'Soccer in-play live Betting Odds logs, archived results, live scores & statistics for all soccer matches, covering all countries, leagues, teams and football clubs.',
         ]) ;
 
