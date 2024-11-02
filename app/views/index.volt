@@ -129,25 +129,28 @@
 
     {{ assets.outputJs('footer') }}
 
-{# 
-    <img id="licntB9B8" style="border:0; display:none" src="data:image/gif;base64,R0lGODlhAQABAIAAAAAAAP///yH5BAEAAAEALAAAAAABAAEAAAIBTAA7" />
+
+
+
+
+
+    <!-- Google tag (gtag.js) -->
+    <script async src="https://www.googletagmanager.com/gtag/js?id=G-NZRWKS05T4"></script>
+    <script>
+    window.dataLayer = window.dataLayer || [];
+    function gtag(){dataLayer.push(arguments);}
+    gtag('js', new Date());
+
+    gtag('config', 'G-NZRWKS05T4');
+    </script>
+
+    <img id="licntDEA4" style="border:0; display:none" src="data:image/gif;base64,R0lGODlhAQABAIAAAAAAAP///yH5BAEAAAEALAAAAAABAAEAAAIBTAA7" />
     <script>
         (function(d, s) {
-            d.getElementById("licntB9B8").src = "https://counter.yadro.ru/hit?t44.17;r" + escape(d.referrer) + ((typeof(s) == "undefined") ? "" : ";s" + s.width + "*" + s.height + "*" + (s.colorDepth ? s.colorDepth : s.pixelDepth)) + ";u" + escape(d.URL) + ";h" + escape(d.title.substring(0, 150)) + ";" + Math.random()
+            d.getElementById("licntDEA4").src = "https://counter.yadro.ru/hit?t50.6;r" + escape(d.referrer) + ((typeof(s) == "undefined") ? "" : ";s" + s.width + "*" + s.height + "*" + (s.colorDepth ? s.colorDepth : s.pixelDepth)) + ";u" + escape(d.URL) + ";h" + escape(d.title.substring(0, 150)) + ";" + Math.random()
         })(document, screen)
     </script>
 
-    <script async src="https://www.googletagmanager.com/gtag/js?id=G-QZ40L0VGX7"></script>
-    <script>
-        window.dataLayer = window.dataLayer || [];
-
-        function gtag() {
-            dataLayer.push(arguments);
-        }
-        gtag('js', new Date());
-
-        gtag('config', 'G-QZ40L0VGX7');
-    </script> #}
 
     <div class="popover p-3"></div>
 
