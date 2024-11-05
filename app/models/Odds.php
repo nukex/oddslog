@@ -110,6 +110,11 @@ class Odds extends \Phalcon\Mvc\Model
      * @var string
      */
     public $over;
+    public $archived;
+    public $underTotal;
+    public $hcap1Odd;
+    public $hcap2Odd;
+    public $total;
 
     /**
      *

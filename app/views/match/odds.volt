@@ -49,12 +49,25 @@
                     <td>{{ vodd.odd12 }}</td>
                     <td>{{ vodd.oddX2 }}</td>
                     <td>
-                        {% if vodd.hcap1 is defined %} {% if vodd.hcap1 >0 %}+ {% endif %} {{ vodd.hcap1 }} {% endif %}
+                        {% if vodd.hcap1 is defined %} 
+                            {% if vodd.hcap1 >0 %}+ {% endif %} 
+                            {{ vodd.hcap1 }} 
+                        {% endif %}
                     </td>
+
                     <td>{{ vodd.hcap1Odd }}</td>
+                    
                     <td>
-                        {% if vodd.hcap2 >0 %}+ {% endif %} {{ vodd.hcap2 }}</td>
-                    <td>{{ vodd.hcap2Odd }}</td>
+                        {% if vodd.hcap2Odd is defined %}{% if vodd.hcap2 >0 %}+ {% endif %} 
+                            {{ vodd.hcap2 }}
+                        {% endif %}
+                    </td>
+
+                    <td>{% if vodd.hcap2Odd is defined %}
+                            {{ vodd.hcap2Odd }}
+                        {% endif %}
+                    </td>
+
                     <td>{{ vodd.total }}</td>
                     <td>{{ vodd.overTotal }}</td>
                     <td>{{ vodd.underTotal }}</td>

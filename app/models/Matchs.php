@@ -32,6 +32,7 @@ class Matchs extends \Phalcon\Mvc\Model
      * @var string
      */
     public $tournament;
+    public $info;
 
     /**
      *

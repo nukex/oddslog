@@ -20,6 +20,7 @@ class IndexController extends ControllerBase
             $countryCode = (preg_match('/women/i',$match->tournament) ? 'women': $this->countryCode($country)) ;
 
             $prefix  = ( !preg_match("/{$country}/i", $match->tournament) ?  $country.'. ' : '' ); 
+
             $Odds['first'] = $match->Odds->getFirst();
             $Odds['last']  = $match->Odds->getLast();
 
@@ -79,9 +80,7 @@ class IndexController extends ControllerBase
         $result['stat'] = ['count'=>$m,'live'=>$l];
 
         krsort($result['matchs']); 
-   
-        // print_r ($result['matchs']);
-        // die();
+
 
         return (object) $result;
     }
@@ -218,18 +217,7 @@ class IndexController extends ControllerBase
 
 
 
-        // print_r ($_POST);
-        // die();
-
-        // if ($_POST['captcha'] ==$_SESSION['captcha'] ) {
-        //     $_SESSION['badView'] = 0;
-        //     $_SESSION['totalView'] = 0;
-        //     header("Location: /live");
-        // } 
-        //     else {
-        //         header('HTTP/1.0 403 Forbidden');
-        //         $this->view->pick('captcha');
-        //     }
+     
 
 
     }
