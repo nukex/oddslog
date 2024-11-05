@@ -33,6 +33,11 @@ class Matchs extends \Phalcon\Mvc\Model
      */
     public $tournament;
     public $info;
+    public $descRu;
+    public $country;
+    public $rating;
+    public $archived;
+    public $h2h;
 
     /**
      *
