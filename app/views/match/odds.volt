@@ -31,7 +31,11 @@
             </thead>
 
             <tbody class="overflow-auto text-select">
-                {% set parentScore = 0 %} {% set parentmatchTime = '' %} {% for key,vodd in odds%} {% if parentmatchTime != vodd.matchTime %} {% set scored = vodd.scoreHome + vodd.scoreAway %}
+                {% set parentScore = 0 %} 
+                {% set parentmatchTime = '' %} 
+                {% for key,vodd in odds%} 
+                    {% if parentmatchTime != vodd.matchTime %} 
+                        {% set scored = vodd.scoreHome + vodd.scoreAway %}
                 <tr class="{% if scored !==parentScore %}border-goal{% endif %}">
 
                     <th scope="row" {% if scored !==parentScore %} class="bg-success" {% endif %}>{{ vodd.matchTime }}'</th>
