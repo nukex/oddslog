@@ -234,6 +234,19 @@ class IndexController extends ControllerBase
 
     }
 
+    public function route404Action() {
+
+        
+        header("HTTP/1.0 404 Not Found");
+
+        $this->setMetadata([
+            'title'     => "404 - OddsLog.com " ,
+            'desc'      =>  'Page not found',
+        ]) ;
+        $this->view->pick('404');
+    
+      }
+
 
 
 

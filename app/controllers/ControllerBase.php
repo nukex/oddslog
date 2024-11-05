@@ -7,7 +7,7 @@ class ControllerBase extends Controller
     public function initialize()
     {
 
-        // $this->getCaptchaCheck();
+        $this->getCaptchaCheck();
 
         $this->view->TotalLive = Matchs::getCountLiveMatchs(date('Y-m-d'));
 
@@ -63,11 +63,11 @@ if (is_null($_SESSION['initTime'])) {
     $_SESSION['badView'] = $badView + 1;
   }
 
-//   if ( $badView >= 6 || ($diffInitView <= 300 && $totalView > 60)  || ($totalView > 100)  ) 
-//   {
-//     header('HTTP/1.0 403 Forbidden');
-//     $this->view->pick('captcha');
-//   }
+  if ( $badView >= 6 || ($diffInitView <= 300 && $totalView > 50)  || ($totalView > 50)  ) 
+  {
+    header('HTTP/1.0 403 Forbidden');
+    $this->view->pick('captcha');
+  }
 
 
 }
