@@ -38,7 +38,7 @@ public function getCaptchaCheck() {
     
     session_start();
    
-if (is_null($_SESSION['initTime'])) {
+if (!isset($_SESSION['initTime'])) {
     $_SESSION['initTime'] = time();
  }
 

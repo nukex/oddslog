@@ -17,7 +17,7 @@ function getContent($url){
         'timeout' => 25 ,
            'header'=>[
                     "User-Agent: Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/94.0.4606.61 Safari/537.36",
-                    'Referer: https://1xstavka.ru/live/Football/',
+                    'Referer: https://1xbet.com/live/Football/',
                     'Accept-Language:ru,tr;q=0.9,en;q=0.8,fr;',
                     'Accept: application/json, text/plain, */*',
                     'sec-ch-ua-platform: "Windows"',
@@ -138,7 +138,7 @@ $matches  = $crud->rawSelect('SELECT id, eventID, info FROM `matchs` WHERE `h2h`
 
             echo $match['id'] . ' - ' . $match['eventID'] . "\n";
 
-            $data = json_decode(getContent('https://1xstavka.ru/SiteService/HeadToHead?gameId='.$info['gameId'].'&ln=en&partner=51&geo=1'), 1);
+            $data = json_decode(getContent('https://1xbet.com/SiteService/HeadToHead?gameId='.$info['gameId'].'&ln=en&partner=51&geo=1'), 1);
 
             
             

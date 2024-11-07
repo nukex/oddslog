@@ -1,3 +1,4 @@
+<pre>
 <?php
 error_reporting(1);
 set_time_limit(0);
@@ -49,7 +50,7 @@ function getContent($url){
         'timeout' => 25 ,
            'header'=>[
                     "User-Agent: Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/94.0.4606.61 Safari/537.36",
-                    'Referer: https://1xstavka.ru/live/Football/',
+                    'Referer: https://1xbet.com/live/Football/',
                     'Accept-Language:ru,tr;q=0.9,en;q=0.8,fr;',
                     'Accept: application/json, text/plain, */*',
                     'sec-ch-ua-platform: "Windows"',
@@ -72,7 +73,7 @@ function separateArray($array) {
 
 $start_time = get_sec();
 
-$file = getContent ('https://1xstavka.ru/LiveFeed/Get1x2_VZip?sports=1&count=1250&lng=en&antisports=188&mode=4&country=1&partner=51&noFilterBlockEvent=true');
+$file = getContent ('https://1xbet.com/LiveFeed/Get1x2_VZip?sports=1&count=1250&lng=en&antisports=188&mode=4&country=1&partner=51&noFilterBlockEvent=true');
 // $file = getContent ('test.json1633032728');
 
 if ($_SERVER['REMOTE_ADDR'] == '127.0.0.1') {
@@ -99,6 +100,7 @@ if (count($data['Value'])>0) {
         if ($val['MIS'][0]['K']!=3 && !preg_match('/(CompletedMatch|4x4|3x3|5x5)/i',$val['L'])) {
 
             $matchTime = floor($val['SC']['TS']/60);
+
 
                 //not in tmpdb && match start
                 if (!in_array($val['I'], $tmpdb) && !is_null($val['SC']['TS']) ) {
