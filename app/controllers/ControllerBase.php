@@ -36,40 +36,43 @@ class ControllerBase extends Controller
 
 public function getCaptchaCheck() {
     
-    session_start();
-   
-if (!isset($_SESSION['initTime'])) {
-    $_SESSION['initTime'] = time();
- }
+    if ( !isGoogleBot() ) {
 
-  $totalView =   $_SESSION['totalView'] ?? 0 ;
-  $initTime =    $_SESSION['initTime']  ?? 0 ;
-  $lastView =    $_SESSION['lastView'] ?? 0 ;
-  $badView =     $_SESSION['badView']  ?? 0 ;
+        
+        session_start();
+        
+        if (!isset($_SESSION['initTime'])) {
+            $_SESSION['initTime'] = time();
+        }
 
-  $diffLastView  =( time() - $lastView);
-  $diffInitView  =( time() - $initTime);
+        $totalView =   $_SESSION['totalView'] ?? 0 ;
+        $initTime =    $_SESSION['initTime']  ?? 0 ;
+        $lastView =    $_SESSION['lastView'] ?? 0 ;
+        $badView =     $_SESSION['badView']  ?? 0 ;
 
-  $_SESSION['totalView'] = ($totalView+1);
-  $_SESSION['lastView'] = time();
+        $diffLastView  =( time() - $lastView);
+        $diffInitView  =( time() - $initTime);
 
-
-
-  if ($diffLastView <= 1) {
-    $_SESSION['badView'] = $badView + 1;
-  }
-  
-  if  ( isset($_SERVER['HTTP_REFERER']) && $_SERVER['HTTP_REFERER'] == 'https://www.google.com/' ) {
-    $_SESSION['badView'] = $badView + 1;
-  }
-
-  if ( $badView >= 6 || ($diffInitView <= 300 && $totalView > 50)  || ($totalView > 50)  ) 
-  {
-    header('HTTP/1.0 403 Forbidden');
-    $this->view->pick('captcha');
-  }
+        $_SESSION['totalView'] = ($totalView+1);
+        $_SESSION['lastView'] = time();
 
 
+
+        if ($diffLastView <= 1) {
+            $_SESSION['badView'] = $badView + 1;
+        }
+        
+        // if  ( isset($_SERVER['HTTP_REFERER']) && $_SERVER['HTTP_REFERER'] == 'https://www.google.com/' ) {
+        //     $_SESSION['badView'] = $badView + 1;
+        // }
+
+        if ( $badView >= 5 || ($diffInitView <= 200 && $totalView > 30)    ) 
+        {
+            header('HTTP/1.0 403 Forbidden');
+            $this->view->pick('captcha');
+        }
+       
+    }
 }
 
 public function notFound() {
@@ -82,10 +85,21 @@ public function notFound() {
     // header("HTTP/1.0 404 Not Found");
     $this->view->pick('noLiveMatch');
 
+    $this->setMetadata([
+        'title'     => "OddsLog.com " ,
+        'desc'      =>  'There are no live matches at the moment',
+    ]) ;
+
+
   }
   public function notAvailable() {
     // header("HTTP/1.0 404 Not Found");
     $this->view->pick('notAvailable');
+
+    $this->setMetadata([
+        'title'     => "OddsLog.com " ,
+        'desc'      =>  'Data temporarily not available',
+    ]) ;
 
   }
 

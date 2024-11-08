@@ -244,4 +244,65 @@ function h2hBTTS($team, $h2h)
         'avgAway'  => $cA>0 ?? round( ($bttsAway/$cA)*100), 
     ];
 }
+
+
+//https://developers.google.com/search/apis/ipranges/googlebot.json
+
+function isGoogleBot()
+{
+   
+    $googleIpList = [
+        '2001.4860.', //ipv6
+        '192.178.5.',
+        '192.178.6.',
+        '34.100.182.',
+        '34.101.50.',
+        '34.118.66.',
+        '35.247.243.',
+        '34.96.162.',
+        '34.89.198.',
+        '34.88.194.',
+        '34.64.82.',
+        '34.22.85.',
+        '34.176.130.',
+        '34.175.160.',
+        '34.165.18.',
+        '34.155.98.',
+        '34.154.114.',
+        '34.152.50.',
+        '34.151.74.',
+        '34.146.150.',
+        '34.126.178.',
+        '66.249.'
+    ];
+
+    $clintIP =  explode('.', str_replace(':', '.',  getClientIP())) ;
+    // 
+
+
+    return (    preg_match('/googlebot/i', $_SERVER['HTTP_USER_AGENT'])  &&
+                preg_grep ('/'.$clintIP[0].'\.'.$clintIP[1].'\./i', $googleIpList)
+            ) 
+            ? true: false;
+
+
+
+}
+
+ function getClientIP()
+{
+    $ip='127.0.0.1';
+
+    if(!empty($_SERVER['HTTP_CLIENT_IP'])):
+        $ip=$_SERVER['HTTP_CLIENT_IP'];
+    elseif(!empty($_SERVER['HTTP_X_FORWARDED_FOR'])):
+        $ip=$_SERVER['HTTP_X_FORWARDED_FOR'];
+    else:
+        $ip=$_SERVER['REMOTE_ADDR'];
+    endif;
+    return $ip;
+}
+
+
+
 ?>

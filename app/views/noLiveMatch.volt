@@ -8,7 +8,7 @@
 
                 <div class="card card-block py-4">
 
-                    <h1 class="fw-bolder h2 mt-1">🔥 no live matches</h1>
+                    <h1 class="fw-bolder h2 mt-1">🔥 There are no live matches at the moment</h1>
 
 
                 </div>
