@@ -131,7 +131,7 @@ $di->set('flash', function () {
 $di->setShared('session', function () {
     $session = new SessionManager();
     $files = new SessionAdapter([
-        'savePath' => ( $_SERVER['REMOTE_ADDR'] == "127.0.0.1" ? sys_get_temp_dir() :  '/home/admin/tmp') // ,
+        'savePath' => ( $_SERVER['REMOTE_ADDR'] == "127.0.0.1" ? sys_get_temp_dir() :  '/home/webuser/tmp') // ,
     ]);
     $session->setAdapter($files);
     $session->start();
