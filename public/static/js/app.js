@@ -1,12 +1,14 @@
-// $(document).on("click", ".event__match", function() {
-//     document.location.href = $(this).find('a').attr('href')
-// });
 
 (function() {
 
 })();
+
+
 var href
 var popover
+
+var $d = $(document)
+const J$  = document.querySelector.bind(document)
 
 function statPopover(data) {
     var popover
@@ -41,7 +43,17 @@ $(document).ready(function($) {
     $("[data-bs-toggle=tooltip]").tooltip();
     $('.prefooter .container').html($('.match-snippet').html())
     $('.match-snippet').remove()
+
+
+    $(window).scroll(function () {
+
+            500 < $(this).scrollTop()
+            ? $(".back-to-top").fadeIn()
+            : $(".back-to-top").fadeOut();
+        })
 });
+
+
 
 $(document).on("mouseenter  click", ".stats", function(e) {
     var data = $(this).data('stat')
@@ -62,9 +74,12 @@ $(document).on("mouseleave", ".stats", function(e) {
 
 
 
+
 $(document).on("change", "#datepicker", function() {
     document.location.href = '/date/' + $(this).val()
 });
+
+
 
 $(document).on("click", "body", function(e) {
     $("#autocomplate").hide();
@@ -123,3 +138,97 @@ $(document).on("keyup", "#search", function(e) {
 $(document).on("click", "#comments-tab", function(e) {
 
 });
+
+
+
+$(document).on("click", "#signin", function () {
+    $("#MainModal .modal-body").load("/form/signin"),
+    $("#MainModal #modal-title").text("Login"),
+    $("#MainModal").modal("show");
+})
+
+  $("#MainModal").on("hidden.bs.modal", function () {})
+
+
+
+  
+
+  async function Sign(type){
+
+    if ( document.querySelector("#form-" + type).reportValidity() ) {
+
+      $('#loading-'+ type).removeClass('d-none')
+      $("#btn-"+ type).attr("disabled", true);
+
+  
+      fetch("/user/" + type, {
+        method: "POST",
+        headers: {"Content-type": "application/x-www-form-urlencoded"},
+        body: JSON.stringify(serializeForm(J$("#form-" + type)))
+
+      }).then(function (response) {
+        if (response.ok) {
+          return response.json();
+        }
+        return Promise.reject(response);
+
+      }).then(function (res) {
+   
+        showToast(res.status, res.message)
+  
+        if (res.status == "success" && res.action == "reload") {
+
+          
+
+          setTimeout(() => {
+            window.location.reload()
+          }, 3000)
+        }
+
+        $('#loading-'+ type).addClass('d-none')
+        if (res.status == 'error') {
+           $("#btn-"+ type).attr("disabled", false);
+        }
+
+  
+      }).catch(function (error) {
+    
+        showToast( error.status, error.statusText )
+      })
+
+    } else {
+        showToast('warn', 'Required fields Please fill in all fields!', 5)
+    }
+    
+  }
+
+
+function showToast(s, t) {
+
+
+    let icons = {"ok":"🟢", "success":"🟢", "error":"🔴" , "warn": "🟡" } 
+    
+    $(".toast").toast("dispose").removeClass("bg-danger-subtle"),
+    $(".toast-header strong").text(s),
+    $(".toast .icon").html(icons[s])
+    $(".toast-body").html(t)
+
+
+    var f = new bootstrap.Toast($(".toast"), {
+        autohide: !0,
+        animation: !0,
+        delay: 1e3 * 6,
+    });
+
+    f.show();
+}
+
+
+  var serializeForm = function (form) {
+    var obj = {};
+    var formData = new FormData(form);
+    for (var key of formData.keys()) {
+      obj[key] = formData.get(key);
+    }
+    return obj;
+  };

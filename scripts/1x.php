@@ -11,6 +11,9 @@ $config = parse_ini_file(__DIR__ . '../../config.ini');
 include_once (__DIR__ . '/libs/crud.class.php');
 include_once (__DIR__ . '/libs/db.php');
 
+
+$Xdomain = ($_SERVER['REMOTE_ADDR'] == '127.0.0.1' ? '1xstavka.ru' : '1xbet.com');
+
 function nullVal ($d) {
     return ($d == '—' || $d =='-' || $d =='' || $d == 0 ? NULL : floatval($d));
     // return $d;
@@ -50,7 +53,7 @@ function getContent($url){
         'timeout' => 25 ,
            'header'=>[
                     "User-Agent: Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/94.0.4606.61 Safari/537.36",
-                    'Referer: https://1xbet.com/live/Football/',
+                    'Referer: https://'.$Xdomain.'/live/Football/',
                     'Accept-Language:ru,tr;q=0.9,en;q=0.8,fr;',
                     'Accept: application/json, text/plain, */*',
                     'sec-ch-ua-platform: "Windows"',
@@ -73,11 +76,11 @@ function separateArray($array) {
 
 $start_time = get_sec();
 
-$file = getContent ('https://1xbet.com/LiveFeed/Get1x2_VZip?sports=1&count=1250&lng=en&antisports=188&mode=4&country=1&partner=51&noFilterBlockEvent=true');
+$file = getContent ('https://'.$Xdomain.'/LiveFeed/Get1x2_VZip?sports=1&count=1250&lng=en&antisports=188&mode=4&country=1&partner=51&noFilterBlockEvent=true');
 // $file = getContent ('test.json1633032728');
 
 if ($_SERVER['REMOTE_ADDR'] == '127.0.0.1') {
-    file_put_contents ('tmp/test.json' . time(), $file );
+    // file_put_contents ('tmp/test.json' . time(), $file );
 }
 
 

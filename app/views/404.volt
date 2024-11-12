@@ -6,7 +6,7 @@
 
             <div class="card card-block py-4">
                 <h2> Error 404 </h2>
-                   <h1 class="fw-bolder h2 mt-1">😔 Sorry. Match not found </h1>
+                   <h1 class="fw-bolder h2 mt-1">😔 Page not found </h1>
                     
 
             </div>

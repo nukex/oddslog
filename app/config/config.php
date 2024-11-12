@@ -30,5 +30,6 @@ return new \Phalcon\Config\Config([
         'libraryDir'     => APP_PATH . '/library/',
         'cacheDir'       => BASE_PATH . '/cache/',
         'baseUri'        => '/',
+        'salt'        =>  $config->get('config')->get('salt'),
     ]
 ]);

@@ -178,9 +178,20 @@ class IndexController extends ControllerBase
             header('Content-Type: application/json');
             $query = $this->request->getPost('query');
             $items = Matchs::search($query);
-            echo ($items);
-            die();
+            
+            die ($items);
+        
         }
+
+    }
+
+
+    //form signinForm
+    public function getFormAction()
+    {
+        $this->view->setRenderLevel( \Phalcon\Mvc\View::LEVEL_ACTION_VIEW );
+        $form   = $this->dispatcher->getParam('form');
+        $this->view->pick('forms/'.$form);
 
     }
 
@@ -192,6 +203,7 @@ class IndexController extends ControllerBase
         if(!empty($recaptcha)) {
           
             echo $recaptcha;
+
             $secret = '6Ld60D0gAAAAAAw_prL4EsLW8Q7M1Sg-Tu3ZpaVO';
         
             $url = "https://www.google.com/recaptcha/api/siteverify?secret=".$secret ."&response=".$recaptcha."&remoteip=".$_SERVER['REMOTE_ADDR'];
@@ -213,12 +225,6 @@ class IndexController extends ControllerBase
             header('HTTP/1.0 403 Forbidden');
             $this->view->pick('captcha');
         }
-
-
-
-
-     
-
 
     }
 

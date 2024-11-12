@@ -2,7 +2,8 @@
 
 $router = $di->getRouter();
 
-
+######################################
+##  Site
 
 $router->add(
     '/football/([0-9]{1,9})/(.*)',
@@ -61,6 +62,10 @@ $router->add(
     ]
 );
 
+
+
+
+
 $router->add(
     '/search/',
     [
@@ -69,6 +74,10 @@ $router->add(
     ]
 )->via(['POST']);
 
+
+
+
+//captcha page
 $router->add(
     '/captcha',
     [
@@ -76,6 +85,14 @@ $router->add(
         'action'     => 'captcha',
     ]
 )->via(['POST']);
+
+//generate captcha image
+$router->add(
+    '/captcha-image',
+    [
+        'action'     => 'captchaImg',
+    ]
+);
 
 
 
@@ -86,8 +103,8 @@ $router->add(
         'action'     => 'sitemaps',
 
     ]
-
 );
+
 
 
 $router->add(
@@ -99,6 +116,94 @@ $router->add(
     ]
 
 );
+
+
+
+
+$router->add(
+    '/form/(.*)',
+    [
+        'controller' => 'index',
+        'action'     => 'getForm',
+        'form'  => 1,
+    ]
+);
+
+
+
+######################################
+##  USER
+
+$router->add(
+    '/user/dashboard',
+    [
+        'controller' => 'user',
+        'action'     => 'dashboard',
+    ]
+);
+
+// user Reg
+$router->add(
+    '/user/signup',
+    [
+        'controller' => 'user',
+        'action'     => 'signup',
+    ]
+)->via(['POST']);
+
+$router->add(
+    '/user/signin',
+    [
+        'controller' => 'user',
+        'action'     => 'signin',
+    ]
+)->via(['POST']);
+
+$router->add(
+    '/logout',
+    [
+        'controller' => 'user',
+        'action'     => 'logout',
+    ]
+);
+
+
+
+$router->add(
+    '/user/reset-password',
+    [
+        'controller' => 'user',
+        'action'     => 'resetPassword',
+    ]
+);
+
+
+$router->add(
+    '/user/reset-password',
+    [
+        'controller' => 'user',
+        'action'     => 'resetPasswordPost',
+    ]
+)->via(['POST']);
+
+
+$router->add(
+    '/user/change-password',
+    [
+        'controller' => 'user',
+        'action'     => 'changePassword',
+    ]
+);
+
+$router->add(
+    '/user/activate',
+    [
+        'controller' => 'user',
+        'action'     => 'activate',
+    ]
+);
+
+
 
 
 //Set 404 paths

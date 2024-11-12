@@ -4,9 +4,26 @@ use Phalcon\Mvc\Controller;
 
 class ControllerBase extends Controller
 {
+
+
+    public function onConstruct()
+    {
+    
+        $this->Salt = $this->config->application->salt;
+
+       
+        $this->checkAuth();
+        $this->view->isAdmin  = $this-> isAdmin();  
+        $this->view->isLogged  = $this-> isLogged();  
+
+
+    
+    }
+    
     public function initialize()
     {
 
+        
         $this->getCaptchaCheck();
 
         $this->view->TotalLive = Matchs::getCountLiveMatchs(date('Y-m-d'));
@@ -14,65 +31,123 @@ class ControllerBase extends Controller
         $footerJS = $this->assets->collection('footer');
         $footerJS->addJs('https://cdnjs.cloudflare.com/ajax/libs/jquery/3.6.0/jquery.min.js',false);
         $footerJS->addJs('/static/bootstrap-5.3.3/js/bootstrap.bundle.min.js',false);
-        $footerJS->addJs('static/js/script.js?v=3');
+        $footerJS->addJs('static/js/app.js?v1');
 
        
-       
-
     }
 
-    public function setMetadata($ar)
-    {
-        $this->view->metadata     =  [
-            'title'    => $ar['title'] ,
-            'desc'     => $ar['desc'],
-            'keywords' => (isset($ar['keywords']) ? $ar['keywords']: null),
-            'og:image' =>  (isset($ar['img']) ? $ar['img']: '/static/img/android-chrome-512x512.png'),
-            'alternate' => (isset($ar['alternate']) ? $ar['alternate']: null),
-            'canonical' => (isset($ar['canonical']) ? $ar['canonical']: null),
-        ] ;
+   
+
+public function isAdmin() {
+    if ( isset( $this->User) && ( $this->User->role == 0) ) {
+   
+        return true;
+      } else {
+        return false;
+      }
+}
+
+public function isLogged() {
+
+    if ( isset( $this->User) && isset( $this->User->email) ) {
+      return true;
+    } else {
+      return false;
     }
+}
+
+public function setCryptCookies( $login, $cryptPasswd)
+{
+    setcookie("log", cryptStr( $login), time()+3600*24*30, "/");
+    setcookie("crc", cryptStr( json_encode ([$login, $cryptPasswd]) ), time()+3600*24*30, "/");
+}
+
+private function checkAuth() {
+  
+    if (isset($_COOKIE['log']) && isset($_COOKIE['crc'])  ) {
+
+      $login = cryptStr( $_COOKIE['log'] , false );
+      $crc   = json_decode( cryptStr($_COOKIE['crc'], false) ); // $crc[0] - login ; $crc[1] - cryptPasswd
+
+    //   dd($login);
+
+      if (isset($crc) && $login == $crc[0]) {
+        $this->User = Users::findFirst(
+          [
+              'conditions' => ' email = :email: AND password  = :password:',
+              'bind' => [
+                  'email' => $login,
+                  'password'=> $crc[1]
+                  ]
+          ]);
+          $this->view->User = $this->User;
+          
+          if (isset($this->User->profile))
+            $this->view->UserProfile = json_decode($this->User->profile);
+      }
+        else {
+          
+          unset($_COOKIE['crc']); 
+          setcookie('crc', '', -1, '/'); 
+        }
+
+        // dd($crc);
+    }
+
+  }
+
+
+  public function setMetadata($ar)
+  {
+      $this->view->metadata     =  [
+          'title'    => $ar['title'] ,
+          'desc'     => $ar['desc'],
+          'keywords' => (isset($ar['keywords']) ? $ar['keywords']: null),
+          'og:image' =>  (isset($ar['img']) ? $ar['img']: '/static/img/logo.png'),
+          'alternate' => (isset($ar['alternate']) ? $ar['alternate']: null),
+          'canonical' => (isset($ar['canonical']) ? $ar['canonical']: null),
+      ] ;
+  }
 
 
 public function getCaptchaCheck() {
-    
-    if ( !isGoogleBot() ) {
+  
+  if ( !isGoogleBot()  ) {
 
-        
-        session_start();
-        
-        if (!isset($_SESSION['initTime'])) {
-            $_SESSION['initTime'] = time();
-        }
+      session_start();
+      
+      if (!isset($_SESSION['initTime'])) {
+          $_SESSION['initTime'] = time();
+      }
 
-        $totalView =   $_SESSION['totalView'] ?? 0 ;
-        $initTime =    $_SESSION['initTime']  ?? 0 ;
-        $lastView =    $_SESSION['lastView'] ?? 0 ;
-        $badView =     $_SESSION['badView']  ?? 0 ;
+      $totalView =   $_SESSION['totalView'] ?? 0 ;
+      $initTime =    $_SESSION['initTime']  ?? 0 ;
+      $lastView =    $_SESSION['lastView'] ?? 0 ;
+      $badView =     $_SESSION['badView']  ?? 0 ;
 
-        $diffLastView  =( time() - $lastView);
-        $diffInitView  =( time() - $initTime);
+      $diffLastView  =( time() - $lastView);
+      $diffInitView  =( time() - $initTime);
 
-        $_SESSION['totalView'] = ($totalView+1);
-        $_SESSION['lastView'] = time();
-
+      $_SESSION['totalView'] = ($totalView+1);
+      $_SESSION['lastView'] = time();
 
 
-        if ($diffLastView <= 1) {
-            $_SESSION['badView'] = $badView + 1;
-        }
-        
-        // if  ( isset($_SERVER['HTTP_REFERER']) && $_SERVER['HTTP_REFERER'] == 'https://www.google.com/' ) {
-        //     $_SESSION['badView'] = $badView + 1;
-        // }
 
-        if ( $badView >= 5 || ($diffInitView <= 200 && $totalView > 30)    ) 
-        {
-            header('HTTP/1.0 403 Forbidden');
-            $this->view->pick('captcha');
-        }
-       
-    }
+      if ($diffLastView <= 1) {
+          $_SESSION['badView'] = $badView + 1;
+      }
+      
+      // if  ( isset($_SERVER['HTTP_REFERER']) && $_SERVER['HTTP_REFERER'] == 'https://www.google.com/' ) {
+      //     $_SESSION['badView'] = $badView + 1;
+      // }
+
+      if ( $badView >= 7 || ($diffInitView <= 200 && $totalView > 30)    ) 
+      {
+          header('HTTP/1.0 403 Forbidden');
+          $this->view->pick('captcha');
+      }
+     
+  }
 }
 
 public function notFound() {
@@ -185,7 +260,13 @@ public function countryCode($val) {
 
 
 
+    public function captchaImgAction()
+    {   
 
+        //library/function
+        getCaptcha ();
+
+    }
 
 
 }

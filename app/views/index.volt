@@ -44,11 +44,13 @@
             <div class="container">
 
 
-                <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarCollapse" aria-controls="navbarCollapse" aria-expanded="false" aria-label="Toggle navigation"><span class="navbar-toggler-icon"></span></button>
-
+              
                 <a class="navbar-brand fw-bold" href="/">
-                    <img src="/static/img/logo.png" alt="OddsLog.com"> ODDSLOG
+                    <img src="/static/img/logo.svg" alt="OddsLog.com"> ODDSLOG
                 </a>
+
+                
+                <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarCollapse" aria-controls="navbarCollapse" aria-expanded="false" aria-label="Toggle navigation"><span class="navbar-toggler-icon"></span></button>
 
     
                 <div class="collapse navbar-collapse" id="navbarCollapse">
@@ -67,16 +69,19 @@
                     </ul>
 
                     <div class="d-flex search-container">
-                        <div class="" data-bs-theme="dark">
-                            <input autocomplete="false" class="form-control border-1  is-valid" id="search" placeholder="Search match..." aria-label="Search">
+                        <div class="me-3" data-bs-theme="dark">
+                            <input autocomplete="false" class="form-control border-1  is-valid" id="search" placeholder="🔍 Search match..." aria-label="Search">
                             <ul id="autocomplate" class="list-group small shadow"></ul>
                         </div>
                     </div>
 
-                    {# <div class="">
-                        <a href="https://www.producthunt.com/posts/oddslogs?utm_source=badge-featured&utm_medium=badge&utm_souce=badge-oddslogs" rel="nofollow" target="_blank"><img src="https://api.producthunt.com/widgets/embed-image/v1/featured.svg?post_id=316072&theme=light" alt="OddsLogs - Detailed statistics and odds by minute for soccer matches | Product Hunt" style="zoom:.75;opacity:.7" width="250"
-                                height="54" /></a>
-                    </div> #}
+                   <div class="">
+
+                        {% include 'user/navUser.volt' %}
+
+                   
+                       
+                    </div>
                 </div>
             </div>
         </nav>
@@ -100,7 +105,7 @@
         <div class="container  pt-3 mb-3">
             <div class="row row-gap-3">
                 <div class="col-md-3">
-                    © 2024 · OddsLog.com <sup>v1.0924</sup>
+                    © 2024 · OddsLog.com <sup>v1.24.10</sup>
                 </div>
                 <div class="col-md-6">
                     <div class=""> 
@@ -123,9 +128,9 @@
         </div>
     </footer>
 
+    {{ partial('index/forms') }}
 
-    <div class="splash"></div>
-    <div id="up"><span class="ico-scroll share-ico"></span></div>
+
 
     {{ assets.outputJs('footer') }}
 
@@ -145,30 +150,15 @@
     </script>
 
     <img id="licntDEA4" style="border:0; display:none" src="data:image/gif;base64,R0lGODlhAQABAIAAAAAAAP///yH5BAEAAAEALAAAAAABAAEAAAIBTAA7" />
+    
     <script>
         (function(d, s) {
-            d.getElementById("licntDEA4").src = "https://counter.yadro.ru/hit?t50.6;r" + escape(d.referrer) + ((typeof(s) == "undefined") ? "" : ";s" + s.width + "*" + s.height + "*" + (s.colorDepth ? s.colorDepth : s.pixelDepth)) + ";u" + escape(d.URL) + ";h" + escape(d.title.substring(0, 150)) + ";" + Math.random()
+            d.getElementById("licntDEA4").src = "https://counter.yadro.ru/hit?t1050.6;r" + escape(d.referrer) + ((typeof(s) == "undefined") ? "" : ";s" + s.width + "*" + s.height + "*" + (s.colorDepth ? s.colorDepth : s.pixelDepth)) + ";u" + escape(d.URL) + ";h" + escape(d.title.substring(0, 150)) + ";" + Math.random()
         })(document, screen)
     </script>
 
 
-    <div class="popover p-3"></div>
-
-    <script id="stat-popover" type="template">
-        <div class="mb-2">
-            <div class="d-flex flex-wrap justify-content-center">
-                <div class="small">##title##</div>
-            </div>
-            <div class="progress progress-sm">
-
-                <div class="progress-bar bg-primary" role="progressbar" style="width: ##percent0##%" data-bs-toggle="tooltip" title="##percent0##">##val0##</div>
-
-                <div class="progress-bar " role="progressbar" style="width: 1%;"></div>
-
-                <div class="progress-bar bg-success " role="progressbar" style="width: ##percent1##%" data-bs-toggle="tooltip" title="##percent1##">##val1##</div>
-            </div>
-        </div>
-    </script>
+  
 
 </body>
 
