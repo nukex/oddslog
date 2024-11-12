@@ -6,6 +6,10 @@ class MatchController extends ControllerBase
 
     public function viewAction()
     {
+
+        $this->getCaptchaCheck();
+
+        
         $id = (int) $this->dispatcher->getParam('id') ;
         $slug =     $this->dispatcher->getParam('slug') ;
         $ajax =     $this->request->getQuery('ajax', 'int');

@@ -88,6 +88,9 @@ class IndexController extends ControllerBase
 
     public function indexAction()
     {
+
+        $this->getCaptchaCheck();
+
         if ($this->dispatcher->getParam('year')) {
             $date = $this->dispatcher->getParam('year').'-'.
                     $this->dispatcher->getParam('month').'-'.

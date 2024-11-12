@@ -8,7 +8,9 @@ class ControllerBase extends Controller
 
     public function onConstruct()
     {
-    
+   
+        session_start();
+        
         $this->Salt = $this->config->application->salt;
 
        
@@ -24,7 +26,7 @@ class ControllerBase extends Controller
     {
 
         
-        $this->getCaptchaCheck();
+        
 
         $this->view->TotalLive = Matchs::getCountLiveMatchs(date('Y-m-d'));
 
@@ -114,7 +116,7 @@ public function getCaptchaCheck() {
   
   if ( !isGoogleBot()  ) {
 
-      session_start();
+     
       
       if (!isset($_SESSION['initTime'])) {
           $_SESSION['initTime'] = time();

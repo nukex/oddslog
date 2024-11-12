@@ -316,7 +316,7 @@ function isGoogleBot()
         '34.146.150.',
         '34.126.178.',
         '66.249.',
-        '127.0.'
+        // '127.0.'
     ];
 
     $clintIP =  explode('.', str_replace(':', '.',  getClientIP())) ;
