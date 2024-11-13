@@ -427,7 +427,7 @@ function sendEmail ($to, $template) {
         break;
 
         case 'activate':
-            $subject = '⚡OddsLog.com: Action Required to Activate your Account';
+            $subject = '⚡Welcome to OddsLog.com! Activate your Account';
 
             $link = 'https://' . $_SERVER['HTTP_HOST'] . 
             '/user/activate?key=' . base64_encode ( $key ) .'&crc=' . hash('ripemd128', $key) ;
