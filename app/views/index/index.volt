@@ -1,6 +1,6 @@
 <div class="">
 
-            <div class="d-flex justify-content-between">
+            <div class="d-flex justify-content-between flex-wrap flex-md-row flex-column">
                 <div class="text-center">
                     <a href="/" class="btn bg-800">{{total['Matchs']}} All </a>
                     <a href="/live" class="btn bg-800 ml-2"><b>{{total['Live'] }}</b> Live </a>
@@ -14,8 +14,7 @@
                     </nav>
                 </div>
 
-
-                <div class="view-date order-0  mt-md-0 text-end">
+                <div class="view-date order-0  mt-3 mt-md-0 text-center">
                     <?php if (strtotime($date['select'])>=1627851600):?>
                             <a href="/date/<?php echo date('Y-m-d',(strtotime($date['select'])-3600*24))?>" class="date__change date__change--back btn bg-800"></a>
                         <?php endif?>
