@@ -24,9 +24,9 @@
 
 
     <link rel="shortcut icon" href="/favicon.ico">
-    <link href="/static/bootstrap-5.3.3/css/bootstrap.min.css" rel="stylesheet">
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/bootstrap/5.3.3/css/bootstrap.min.css" rel="stylesheet">
 
-    <link rel="stylesheet" type="text/css" href="/static/css/main.css" />
+    <link rel="stylesheet" type="text/css" href="/static/css/main.css?v2" />
     <link rel="stylesheet" type="text/css" href="/static/css/icons.css" /> 
    
     {% if assets.exists('header') %}
