@@ -67,17 +67,17 @@
                                 </div>
                             </div>
 
-							<small class="form-group d-md-flex">
-								<div class="w-50 text-start">
+							<small class="row">
+								<div class="col-6 text-start">
 
 									<input type="checkbox" id="remember_me" name="remember_me">
 									<label for="remember_me" class="checkbox-primary mb-0">Remember Me</label>
 									
 								</div>
 
-											<div class="w-50 text-end">
-												<a href="/user/reset-password" class="">Forgot Password</a>
-											</div>
+								<div class="col-6 text-end">
+									<a href="/user/reset-password" class="">Forgot Password</a>
+								</div>
 							</small>
 
 						
