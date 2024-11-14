@@ -4,7 +4,7 @@
 })();
 
 
-var href
+
 var popover
 
 var $d = $(document)
@@ -82,11 +82,15 @@ $(document).on("change", "#datepicker", function() {
 
 
 $(document).on("click", "body", function(e) {
-    $("#autocomplate").hide();
+
 });
 
 
-$(document).on("keyup", "#search", function(e) {
+$(document).on("change keyup input ", "#search", function(e) {
+
+  var href
+
+  console.log('search input')
     if (e.keyCode != 38 && e.keyCode != 40 && e.keyCode != 39 && e.keyCode != 37) {
 
         if ($(this).val().length > 1) {
@@ -135,23 +139,27 @@ $(document).on("keyup", "#search", function(e) {
 
 
 
+$(document).on("click", ".search-tags span", function(e) {
+  $('#search').val( $(this).text()).trigger("change");
+});
+
+
 $(document).on("click", "#comments-tab", function(e) {
 
 });
 
 
 
-$(document).on("click", "#signin", function () {
-    $("#MainModal .modal-body").load("/form/signin"),
-    $("#MainModal #modal-title").text("Login"),
+$(document).on("click", ".open-modal", function () {
+    let id = $(this).data('id')
+    $("#MainModal .modal-body").load("/form/"+id),
+    $("#MainModal #modal-title").text(id),
     $("#MainModal").modal("show");
 })
 
   $("#MainModal").on("hidden.bs.modal", function () {})
 
 
-
-  
 
   async function Sign(type){
 
@@ -232,3 +240,14 @@ function showToast(s, t) {
     }
     return obj;
   };
+
+
+  var openOffcanvas = !1;
+
+  $(document).on("click", "button.navbar-toggler", function () {
+
+    
+    openOffcanvas ||
+      ($(".offcanvas-body").html($("#navbarCollapse").html()),
+      (openOffcanvas = !0));
+  })

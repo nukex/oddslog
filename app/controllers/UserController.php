@@ -274,7 +274,7 @@ class UserController extends ControllerBase {
             
             $email = cryptStr($email, false);
 
-            if ( (time() - $time) < 3600 * 12 ) {
+            if ( (time() - $time) < 3600 * 24 ) {
 
                 $user = Users::findFirst(
                     [

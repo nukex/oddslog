@@ -33,7 +33,7 @@ class ControllerBase extends Controller
         $footerJS = $this->assets->collection('footer');
         $footerJS->addJs('https://cdnjs.cloudflare.com/ajax/libs/jquery/3.6.0/jquery.min.js',false);
         $footerJS->addJs('/static/bootstrap-5.3.3/js/bootstrap.bundle.min.js',false);
-        $footerJS->addJs('static/js/app.js?v1');
+        $footerJS->addJs('static/js/app.js?v2');
 
        
     }

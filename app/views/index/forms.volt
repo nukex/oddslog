@@ -42,7 +42,7 @@
         <button type="button" class="btn-close" data-bs-dismiss="offcanvas" aria-label="Close"></button>
     </div>
     <div class="offcanvas-body">
-        <ul class="navbar-nav justify-content-end flex-grow-1 pe-3 fs-2">
+        <ul class="flex-row-reverse">
         </ul>
     </div>
 </div>
@@ -60,7 +60,7 @@
         <div class="modal-content">
 
             <div class="modal-header bg-900">
-                <h5 class="modal-title" id="modal-title"></h5>
+                <h5 class="modal-title text-capitalize" id="modal-title"></h5>
                 <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
 
             </div>
@@ -72,3 +72,6 @@
         </div>
     </div>
 </div>
+
+<!-- Search -->
+
