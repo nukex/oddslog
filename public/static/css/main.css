@@ -664,7 +664,9 @@ footer,
 }
 
 @media(max-width:768px) {
-
+    nav {
+        zoom: .85;
+    }
 
     .navbar-toggler:focus {
         box-shadow: none;
