@@ -158,7 +158,7 @@ class Matchs extends \Phalcon\Mvc\Model
         $paginator = new PaginatorQueryBuilder(
             [
                 'builder' => $builder,
-                'limit'   => 120 ,
+                'limit'   => 100 ,
                 'page'    => $page,
             ]
         );

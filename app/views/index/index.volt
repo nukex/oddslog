@@ -1,20 +1,21 @@
 <div class="">
 
-            <div class="d-flex justify-content-between flex-wrap flex-md-row flex-column">
-                <div class="text-center">
+            <div class="d-flex justify-content-between flex-wrap flex-row" id="subnav">
+                
+                <div class="text-center ">
                     <a href="/" class="btn bg-800">{{total['Matchs']}} All </a>
                     <a href="/live" class="btn bg-800 ml-2"><b>{{total['Live'] }}</b> Live </a>
                 </div>
 
-                <div class="order-md-0 order-1 ">
-                    <nav aria-label="Page navigation" class=" mt-3 mt-md-0" data-bs-theme="dark">
-                            <ul class="pagination pagination-sm justify-content-center mb-0">
+                <div class="order-md-0 order-0 d-none d-md-block">
+                    <nav aria-label="Page navigation"  data-bs-theme="dark">
+                            <ul class="pagination  justify-content-center ">
                                 {{ partial('index/pagination', [ 'page': items, 'limit': items.getLimit() ]) }}
                             </ul>
                     </nav>
                 </div>
 
-                <div class="view-date order-0  mt-3 mt-md-0 text-center">
+                <div class="view-date order-1 text-center">
                     <?php if (strtotime($date['select'])>=1627851600):?>
                             <a href="/date/<?php echo date('Y-m-d',(strtotime($date['select'])-3600*24))?>" class="date__change date__change--back btn bg-800"></a>
                         <?php endif?>
@@ -29,7 +30,7 @@
 
 
 
-    <div class="card my-4  rounded" data-bs-theme="dark">
+    <div class="card my-3 rounded" data-bs-theme="dark">
 
     {% for rating, listMatches in matchs.matchs %}
 

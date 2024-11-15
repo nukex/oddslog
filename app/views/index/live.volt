@@ -3,8 +3,9 @@
     
 
     
-     <div class="d-flex justify-content-between flex-wrap flex-md-row flex-column">
-                <div class="text-center">
+     <div class="d-flex justify-content-between flex-wrap flex-row" id="subnav">
+               
+        <div class="text-center">
                     <a href="/" class="btn bg-900">{{total['Matchs']}} All </a>
                     <a href="/live" class="btn bg-900  ml-2"><b>{{total['Live']}}</b> Live  
 
@@ -26,7 +27,7 @@
 
             </div>
 
-    <div class="card my-4  rounded " data-bs-theme="dark">
+    <div class="card my-3 rounded " data-bs-theme="dark">
 
     {% for rating, listMatches in matchs.matchs %}
         {% for tournament, group in listMatches %}

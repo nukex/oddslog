@@ -26,7 +26,7 @@
     <link rel="shortcut icon" href="/favicon.ico">
     <link href="https://cdnjs.cloudflare.com/ajax/libs/bootstrap/5.3.3/css/bootstrap.min.css" rel="stylesheet">
 
-    <link rel="stylesheet" type="text/css" href="/static/css/main.css?v3" />
+    <link rel="stylesheet" type="text/css" href="/static/css/main.css?v4" />
     <link rel="stylesheet" type="text/css" href="/static/css/icons.css" /> 
    
     {% if assets.exists('header') %}
@@ -160,7 +160,7 @@
 
 
 
-
+{% if isAdmin %}
     <!-- Google tag (gtag.js) -->
     <script async src="https://www.googletagmanager.com/gtag/js?id=G-NZRWKS05T4"></script>
     <script>
@@ -178,7 +178,7 @@
             d.getElementById("licntDEA4").src = "https://counter.yadro.ru/hit?t1050.6;r" + escape(d.referrer) + ((typeof(s) == "undefined") ? "" : ";s" + s.width + "*" + s.height + "*" + (s.colorDepth ? s.colorDepth : s.pixelDepth)) + ";u" + escape(d.URL) + ";h" + escape(d.title.substring(0, 150)) + ";" + Math.random()
         })(document, screen)
     </script>
-
+{% endif %}
 
   
 
