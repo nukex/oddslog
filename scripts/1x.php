@@ -87,7 +87,7 @@ if ($_SERVER['REMOTE_ADDR'] == '127.0.0.1') {
 
 
 $dbCache = new SQLite(
-    ['driver' => 'sqlite', 'url' => 'matchs.db']);
+    ['driver' => 'sqlite', 'url' => __DIR__ . '/matchs.db']);
 
 
 printf ("<!-- %f -->", (get_sec() - $start_time) ) ;
