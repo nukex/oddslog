@@ -1,7 +1,7 @@
 cache/*
 config.ini
 public/google21f05006ae28f493.html
-scripts/tmpdb.txt
+scripts/matchs.db
 scripts/tmp/*
 scripts/updateInfo.php
 git-pull.php

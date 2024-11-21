@@ -44,7 +44,7 @@ function groupKeyValue($array, $key, $v) {
 
 function replaceTitle ($str) {
 
-    return str_replace ([' (Women)'],'', $str);
+    return str_replace ([' (Women)',"'"],'', $str);
 }
 
 function separateArray($array) { 
@@ -82,7 +82,7 @@ $file = getContent ('https://'.$Xdomain.'/LiveFeed/Get1x2_VZip?sports=1&count=12
 $data =  json_decode($file,1);
 
 if ($_SERVER['REMOTE_ADDR'] == '127.0.0.1') {
-    // file_put_contents ('tmp/test.json' . time(), $file );
+    file_put_contents ('tmp/test.json' . time(), $file );
 }
 
 
@@ -99,8 +99,8 @@ if (count($data['Value'])>0) {
         // not cyber sport
         if ($val['MIS'][0]['K']!=3 && !preg_match('/(CompletedMatch|4x4|3x3|5x5)/i',$val['L'])) {
 
-            $team['team1'] = replaceTitle ($val['O1']);
-            $team['team2'] = replaceTitle ($val['O2']);
+            $team['team1'] = addslashes  ( replaceTitle ($val['O1']));
+            $team['team2'] = addslashes  ( replaceTitle ($val['O2']));
 
             $time['4h']    = date ('Y-m-d H:i:s', time() - 3600* 4 );
             $time['now']    = date ('Y-m-d H:i:s', time() );
@@ -115,6 +115,8 @@ if (count($data['Value'])>0) {
                     $checkTeamName = $dbCache->select('matchs')
                         ->where(" team1 = '{$team['team1']}' AND team2 = '{$team['team2']}' AND date BETWEEN '{$time['4h']}' AND '{$time['now']}' ")
                         ->first()->run();
+                        
+                        $dbCache->showQuery();
 
 
                     //Change eventID -> Old ID for Odds & Stats (fix double Team Name )

@@ -38,3 +38,10 @@ AND t1.id > t2.id;
 SELECT GROUP_CONCAT(id), `eventID`, COUNT(*) c 
 FROM h2h 
 GROUP BY `eventID` HAVING c > 1;
+
+
+
+
+
+https://1xbet-mn.com/en/line/football/28645-algeria-ligue-1/237783091-constantine-usm-alger
+
