@@ -4,4 +4,37 @@ ALTER TABLE таблица2 DISCARD TABLESPACE;
 ALTER TABLE таблица1 IMPORT TABLESPACE;
 
 
-a
+
+
+
+INSERT INTO odds2 (eventID,matchTime,scoreHome,	scoreAway,w1,x,w2,odd1X,odd12,oddX2,hcap1,hcap2,hcap1Odd,hcap2Odd,underTotal,overTotal,	total,	period,	timeLine)
+SELECT eventID,matchTime,scoreHome,	scoreAway,w1,x,w2,odd1X,odd12,oddX2,hcap1,hcap2,hcap1Odd,hcap2Odd,underTotal,overTotal,	total,	period,	timeLine
+FROM odds3 t3
+WHERE NOT EXISTS (
+    SELECT 1
+    FROM odds2 t2
+    WHERE t3.eventID = t2.eventID
+)
+
+
+
+
+--------------------------------------------
+
+INSERT INTO stats (id,	eventID,matchTime,attacks,dangerous,possession,shotsOn,shotsOff,corners,yellow,red,penalty)
+SELECT -id, eventID,matchTime,attacks,dangerous,possession,shotsOn,shotsOff,corners,yellow,red,penalty
+FROM stats2
+
+---------------- дубли
+
+SELECT t1.*
+FROM h2h t1
+JOIN h2h t2
+ON t1.eventID = t2.eventID
+AND t1.id > t2.id;
+
+
+
+SELECT GROUP_CONCAT(id), `eventID`, COUNT(*) c 
+FROM h2h 
+GROUP BY `eventID` HAVING c > 1;

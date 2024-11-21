@@ -10,9 +10,10 @@ $config = parse_ini_file(__DIR__ . '../../config.ini');
 
 include_once (__DIR__ . '/libs/crud.class.php');
 include_once (__DIR__ . '/libs/db.php');
+require_once (__DIR__ . '/libs/sqlite.php');
 
 
-$Xdomain = ($_SERVER['REMOTE_ADDR'] == '127.0.0.1' ? '1xstavka.ru' : '1xbet.com');
+$Xdomain = ($_SERVER['REMOTE_ADDR'] == '127.0.0.1' ? '1xbet-mn.com' : '1xbet.com');
 
 function nullVal ($d) {
     return ($d == '—' || $d =='-' || $d =='' || $d == 0 ? NULL : floatval($d));
@@ -46,6 +47,10 @@ function replaceTitle ($str) {
     return str_replace ([' (Women)'],'', $str);
 }
 
+function separateArray($array) { 
+    return (!is_null($array[0]) ? implode ('|', $array) : NULL); 
+}
+
 function getContent($url){
 	
     $ctx = stream_context_create(array( 
@@ -68,75 +73,98 @@ function getContent($url){
     return $result;
 }
 
-function separateArray($array) { 
 
-
-    return (!is_null($array[0]) ? implode ('|', $array) : NULL); 
-}
 
 $start_time = get_sec();
 
 $file = getContent ('https://'.$Xdomain.'/LiveFeed/Get1x2_VZip?sports=1&count=1250&lng=en&antisports=188&mode=4&country=1&partner=51&noFilterBlockEvent=true');
-// $file = getContent ('test.json1633032728');
+// $file = getContent ('tmp/test.json1732201994');
+$data =  json_decode($file,1);
 
 if ($_SERVER['REMOTE_ADDR'] == '127.0.0.1') {
     // file_put_contents ('tmp/test.json' . time(), $file );
 }
 
 
+$dbCache = new SQLite(
+    ['driver' => 'sqlite', 'url' => 'matchs.db']);
 
-$data =  json_decode($file,1);
-$tmpdb = file(__DIR__ . '/tmpdb.txt', FILE_IGNORE_NEW_LINES);
-
-$u = 0;
 
 printf ("<!-- %f -->", (get_sec() - $start_time) ) ;
 
-// print_r ($tmpdb);
-
 if (count($data['Value'])>0) {
-
 
     foreach ($data['Value'] as $key => $val) {
         
         // not cyber sport
         if ($val['MIS'][0]['K']!=3 && !preg_match('/(CompletedMatch|4x4|3x3|5x5)/i',$val['L'])) {
 
-            $matchTime = floor($val['SC']['TS']/60);
+            $team['team1'] = replaceTitle ($val['O1']);
+            $team['team2'] = replaceTitle ($val['O2']);
 
+            $time['4h']    = date ('Y-m-d H:i:s', time() - 3600* 4 );
+            $time['now']    = date ('Y-m-d H:i:s', time() );
+
+            $checkCacheID = $dbCache->select('matchs')
+            ->where(" eventID ='{$val['I']}' ")
+            ->first()->run();
 
                 //not in tmpdb && match start
-                if (!in_array($val['I'], $tmpdb) && !is_null($val['SC']['TS']) ) {
-                    $matches [] = [
-                    'eventID'   =>  $val['I'],
-                    'team1'     =>  replaceTitle ($val['O1']),
-                    'team2'     =>  replaceTitle ($val['O2']),
-                    'country'   =>  $val['CN'],
-                    'tournament'=>  $val['L'],
-                    'timestart' =>  date('Y-m-d H:i:s', $val['S']),
-                    'descRu'    =>  json_encode([
-                                    'team1' => $val['O1R'],
-                                    'team2' => $val['O2R'],
-                                    'lg' => $val['LR'],
-                                    ]),
-                    'info'    =>  json_encode([
-                                    'place'     => groupKeyValue ($val['MIS'],'K','V'),
-                                    'team1ID'   => $val['O1I'],
-                                    'team2ID'   => $val['O2I'],
-                                    'gameId'    => $val['SGI'],
-                                    'lineup'    => $val['HLU'],
-                                    'lID'       => $val['LI'],
-                                    ]),
+                if ( !$checkCacheID && !is_null($val['SC']['TS']) ) {
 
-                    'h2h'       => ($val['SGI']!=''?1:0),
-                    'rating'    => $val['R'] / 100
+                    $checkTeamName = $dbCache->select('matchs')
+                        ->where(" team1 = '{$team['team1']}' AND team2 = '{$team['team2']}' AND date BETWEEN '{$time['4h']}' AND '{$time['now']}' ")
+                        ->first()->run();
 
-                    ];
 
-                    $eventID[] = $val['I'];
+                    //Change eventID -> Old ID for Odds & Stats (fix double Team Name )
+                    if (  $checkTeamName['eventID']!='' &&  $checkTeamName['eventID'] !=  $val['I']) {
+                        echo "!! Change eventID: {$val['I']} -> {$checkTeamName['eventID']} \n";
+                        
+                        $val['I'] = $checkTeamName['eventID'];
+                    } 
+
+                     else {
+
+                        $matches [] = [
+                            'eventID'   =>  $val['I'],
+                            'team1'     =>  $team['team1'],
+                            'team2'     =>  $team['team2'],
+                            'country'   =>  $val['CN'],
+                            'tournament'=>  $val['L'],
+                            'timestart' =>  date('Y-m-d H:i:s', $val['S']),
+                  
+        
+                            'info'    =>  json_encode([
+                                            'gameId'    => $val['SGI'],
+                                            'place'     => groupKeyValue ($val['MIS'],'K','V'),
+                                            'team1ID'   => $val['O1I'],
+                                            'team2ID'   => $val['O2I'],
+                                           
+                                            'lineup'    => $val['HLU'],
+                                            'lID'       => $val['LI'],
+                                            ]),
+        
+                            'h2h'       => ($val['SGI']!='' ?1:0),
+                            'rating'    => $val['R'] / 100
+        
+                            ];
+        
+                            $cacheEventID[] = [   
+                                                'id' => NULL,
+                                                'eventID' => $val['I'],
+                                                'date' =>  $dbCache->func('date', 'Y-m-d H:i:s'),
+                                                'team1' => $team['team1'],
+                                                'team2' => $team['team2'],              
+                                             ];
+
+                     }
+               
                 }
 
-            $coef = groupArray ($val['E'],'T');
+            $coef       = groupArray ($val['E'],'T');
+            $matchTime  = floor($val['SC']['TS']/60);
+
             if (!empty($val['SC']['TS']) && ($val['SC']['CPS'] !='Half time' && $val['SC']['TS'] !=2700) ) {
                     $lines [] = [
                         'eventID'       =>  $val['I'],
@@ -173,42 +201,29 @@ if (count($data['Value'])>0) {
             $statRaw = groupArray ($val['SC']['ST'][0]['Value'],'ID');
 
     
-            if (  
-                (!empty($statRaw) && ($val['SC']['CPS'] !='Half time' 
-            && $val['SC']['TS'] !=2700))  
-            && $matchTime !=0 
-            && count($statRaw)>0 ) {
+            if (  (!empty($statRaw) && ($val['SC']['CPS'] !='Half time' 
+                    && $val['SC']['TS'] !=2700))  
+                    && $matchTime !=0 
+                    && count($statRaw)>0 ) 
+                {
                     
-                $stats [] = [
-                        'eventID'       => $val['I'],
-                        'matchTime'     => $matchTime,
-                        'attacks'       => separateArray ( [$statRaw[45]['S1'] , $statRaw[45]['S2']] ) ,
-                        'dangerous'     => separateArray ( [$statRaw[58]['S1'] , $statRaw[58]['S2']] ) ,
-                        'possession'    => separateArray ( [$statRaw[29]['S1'] , $statRaw[29]['S2']] ) ,
-                        'shotsOn'       => separateArray ( [$statRaw[59]['S1'] , $statRaw[59]['S2']] ) ,
-                        'shotsOff'      => separateArray ( [$statRaw[60]['S1'] , $statRaw[60]['S2']] ) ,
-                        'corners'       => separateArray ( [$statRaw[70]['S1'] , $statRaw[70]['S2']] ) ,
-                        'yellow'        => separateArray ( [$statRaw[26]['S1'] , $statRaw[26]['S2']] ),
-                        'red'           => separateArray ( [$statRaw[71]['S1'] , $statRaw[71]['S2']] ),
-                        'penalty'       => separateArray ( [$statRaw[72]['S1'] , $statRaw[72]['S2']] ),
-                ];
+                    $stats [] = [
+                            'eventID'       => $val['I'],
+                            'matchTime'     => $matchTime,
+                            'attacks'       => separateArray ( [$statRaw[45]['S1'] , $statRaw[45]['S2']] ) ,
+                            'dangerous'     => separateArray ( [$statRaw[58]['S1'] , $statRaw[58]['S2']] ) ,
+                            'possession'    => separateArray ( [$statRaw[29]['S1'] , $statRaw[29]['S2']] ) ,
+                            'shotsOn'       => separateArray ( [$statRaw[59]['S1'] , $statRaw[59]['S2']] ) ,
+                            'shotsOff'      => separateArray ( [$statRaw[60]['S1'] , $statRaw[60]['S2']] ) ,
+                            'corners'       => separateArray ( [$statRaw[70]['S1'] , $statRaw[70]['S2']] ) ,
+                            'yellow'        => separateArray ( [$statRaw[26]['S1'] , $statRaw[26]['S2']] ),
+                            'red'           => separateArray ( [$statRaw[71]['S1'] , $statRaw[71]['S2']] ),
+                            'penalty'       => separateArray ( [$statRaw[72]['S1'] , $statRaw[72]['S2']] ),
+                    ];
 
         
             }
 
-            // update info match
-
-            // if ($matchTime == 2) {
-            //     $matchInfo['info'] = json_encode([
-            //                 'place'     => $val['MIS'],
-            //                 'team1ID'   => $val['O1I'],
-            //                 'team2ID'   => $val['O2I'],
-            //     ]);
-              
-            //     echo "\n Update: ". $val['I']."\n";
-            //     $crud->dbMultiUpdate('matchs',   $matchInfo ,  'eventID',  $val['I']);
-            //     $u++;
-            // }
         }
     }
 
@@ -217,20 +232,10 @@ if (count($data['Value'])>0) {
         $crud->dbInsert('matchs', $matches);
         echo "\n ** Add  matches: ".count($matches);
 
-        if (count($tmpdb)>300 && date('H') == 4) {
-            echo "\n +++ reset tmp DB +++\n";
-            $output = array_slice($tmpdb, -200, 300);
-            $resetDB = array_merge($output, $eventID);
-
-            file_put_contents(__DIR__ . '/tmpdb.txt', implode("\n",$resetDB)."\n");
-
-        } else {
-            file_put_contents(__DIR__ . '/tmpdb.txt', implode("\n",$eventID)."\n", FILE_APPEND | LOCK_EX);
-        }
-
-        
+        $insertCache = $dbCache->insertArray('matchs', $cacheEventID) ->run();
 
     }
+
 
     if (count($lines)>0) {
         $crud->dbInsert('odds', $lines);
@@ -244,6 +249,8 @@ if (count($data['Value'])>0) {
     if ($u>0) {
         echo "\n $$ Update match info: ".$u ;
     }
+
+
 
 }
 
