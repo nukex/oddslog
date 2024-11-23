@@ -18,6 +18,7 @@ class MatchController extends ControllerBase
 
         $country = explode ('. ', $match->tournament);
         $country = (isset($match->country) ? $match->country  : $country[0])  ;
+        $isWomen = (preg_match('/women/i',$match->tournament) ? true: false);
 
         $matchSlug =  Slug($country.' '. $match->team1.' '.$match->team2);
         
@@ -71,7 +72,7 @@ class MatchController extends ControllerBase
 
     
         $this->view->matchStatus = $this->matchStatus($lastOdds);
-        $this->view->countryFlag = (preg_match('/women/i',$match->tournament) ? 'women': $this->countryCode($country)) ;
+        $this->view->countryFlag = $isWomen ? 'women': $this->countryCode($country) ;
 
         $this->view->country     = $country;
         $this->view->matchInfo   = json_decode ($match->info, 1);
@@ -84,9 +85,9 @@ class MatchController extends ControllerBase
 
 
         $this->view->meta    = [
-            'info'      => $match->team1 . ' vs ' . $match->team2 . " ({$lastOdds->scoreHome} : {$lastOdds->scoreAway}) Odds archive, Live Score and Stats. Starts on ". date ('d M Y - H:i', strtotime($match->timestart) ) . " UTC time at " .($this->view->matchInfo['place'][2]!=''?$this->view->matchInfo['place'][2]. ' stadium, ':'')."{$match->tournament}, {$this->view->matchInfo['place'][1]}" ,
+            'info'      => $match->team1 . ' vs ' . $match->team2 . "  ({$lastOdds->scoreHome}:{$lastOdds->scoreAway}) - {$match->tournament}. Starts on ".date ('d/m/Y', strtotime($match->timestart) ).". Historical Stats & Odds. In-Play archive." ,
 
-            'infoTitle' =>  $match->team1 . ' - ' . $match->team2 .' - Odds archive - '. date ('d/m/Y', strtotime($match->timestart))
+            'infoTitle' =>  $match->team1 . ' - ' . $match->team2 .  ($isWomen? " - Women " : " "). "(". date ('d/m/Y', strtotime($match->timestart)).') - OddsLog.com' 
         ];
         
         
@@ -94,7 +95,7 @@ class MatchController extends ControllerBase
         $this->setMetadata([    
                 'title'     => $this->view->meta['infoTitle']  ,
                 'desc'      => $this->view->meta['info'],
-                'canonical'      => '/match/'.$match->id . '/'. $matchSlug
+                // 'canonical'      => '/football/'.$match->id . '/'. $matchSlug
             ]) ;
 
         if ($ajax == 1) {
