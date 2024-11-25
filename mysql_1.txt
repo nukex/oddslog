@@ -1,20 +1,48 @@
-ALTER TABLE таблица1 DISCARD TABLESPACE;
-ALTER TABLE таблица2 DISCARD TABLESPACE;
-
-ALTER TABLE таблица1 IMPORT TABLESPACE;
+ALTER TABLE tabl1 DISCARD TABLESPACE;
+ALTER TABLE tabl1 IMPORT TABLESPACE;
 
 
 
 
+-------------------
+odds2->odds
 
-INSERT INTO odds2 (eventID,matchTime,scoreHome,	scoreAway,w1,x,w2,odd1X,odd12,oddX2,hcap1,hcap2,hcap1Odd,hcap2Odd,underTotal,overTotal,	total,	period,	timeLine)
-SELECT eventID,matchTime,scoreHome,	scoreAway,w1,x,w2,odd1X,odd12,oddX2,hcap1,hcap2,hcap1Odd,hcap2Odd,underTotal,overTotal,	total,	period,	timeLine
-FROM odds3 t3
+INSERT INTO odds (eventID,matchTime,scoreHome,scoreAway,w1,x,w2,odd1X,odd12,oddX2,hcap1,hcap2,hcap1Odd,hcap2Odd,underTotal,overTotal,total,period,timeLine)
+SELECT eventID,matchTime,scoreHome,scoreAway,w1,x,w2,odd1X,odd12,oddX2,hcap1,hcap2,hcap1Odd,hcap2Odd,underTotal,overTotal,total,period,timeLine
+FROM odds2 m2
+
 WHERE NOT EXISTS (
     SELECT 1
-    FROM odds2 t2
-    WHERE t3.eventID = t2.eventID
+    FROM odds m1
+    WHERE m2.eventID = m1.eventID
 )
+
+-------------------
+matchs2 -> matchs
+
+INSERT INTO matchs (eventID,timestart,rating,team1,team2,tournament,country,h2h,info)
+SELECT eventID,timestart,rating,team1,team2,tournament,country,h2h,info
+FROM matchs2 m2
+
+WHERE NOT EXISTS (
+    SELECT 1
+    FROM matchs m1
+    WHERE m2.eventID = m1.eventID
+)
+
+--------------------------------------------
+h2h2 -> h2h
+
+INSERT INTO h2h (eventID,data,datetime)
+SELECT eventID,data,datetime
+FROM h2h2 m2
+
+WHERE NOT EXISTS (
+    SELECT 1
+    FROM h2h m1
+    WHERE m2.eventID = m1.eventID
+)
+--------------------------------------------
 
 
 
@@ -25,8 +53,48 @@ INSERT INTO stats (id,	eventID,matchTime,attacks,dangerous,possession,shotsOn,sh
 SELECT -id, eventID,matchTime,attacks,dangerous,possession,shotsOn,shotsOff,corners,yellow,red,penalty
 FROM stats2
 
----------------- дубли
 
+
+--------------
+Поиск одинаковых в двух таблицах
+
+SELECT eventID, team1	team2
+FROM matchs m1
+WHERE EXISTS (
+    SELECT 1
+    FROM matchs2 m2
+    WHERE m2.eventID = m1.eventID
+)
+
+
+-----------------------------
+
+
+INSERT INTO Compile (eventID, count)
+SELECT o.eventID, COUNT(*) c
+FROM `odds` o
+INNER JOIN matchs as m ON  m.eventID = o.eventID
+WHERE `tournament` NOT REGEXP 'U19|U21|Women|8x8|U20|6x6|U23|Reserves|Young|Legends|Reserve|Veterans|Collegiate|Student|Youth|Olympics|Games'
+
+GROUP BY `eventID` 
+HAVING c > 85
+
+_________________________________________
+
+DELETE t1, t2
+FROM MainTable t1
+JOIN RelatedTable t2 ON t1.EventID = t2.EventID
+WHERE t1.Tournament = 'YourTournamentFilter';
+
+
+_________________________________________
+
+DELETE FROM `matchs` WHERE `eventID` = '566267811' ;
+DELETE FROM `odds` WHERE `eventID` = '566267811'  ;
+DELETE FROM `stats` WHERE `eventID` = '566267811'  ;
+DELETE FROM `h2h` WHERE `eventID` = '566267811'  ;
+
+---------------- дубли
 SELECT t1.*
 FROM h2h t1
 JOIN h2h t2
@@ -38,6 +106,9 @@ AND t1.id > t2.id;
 SELECT GROUP_CONCAT(id), `eventID`, COUNT(*) c 
 FROM h2h 
 GROUP BY `eventID` HAVING c > 1;
+
+
+
 
 
 

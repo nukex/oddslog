@@ -97,7 +97,7 @@ if (count($data['Value'])>0) {
     foreach ($data['Value'] as $key => $val) {
         
         // not cyber sport
-        if ($val['MIS'][0]['K']!=3 && !preg_match('/(CompletedMatch|4x4|3x3|5x5)/i',$val['L'])) {
+        if ($val['MIS'][0]['K']!=3 && !preg_match('/(CompletedMatch|4x4|3x3|5x5|U21|U20|U19|Young|Reserves|Reserve|Collegiate|Student|)/i',$val['L'])) {
 
             $team['team1'] = addslashes  ( replaceTitle ($val['O1']));
             $team['team2'] = addslashes  ( replaceTitle ($val['O2']));

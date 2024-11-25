@@ -37,6 +37,7 @@ class MatchController extends ControllerBase
 
         $odds   = Odds::find([
             'distinct' => 'matchTime',
+            "order" =>    'matchTime',
             "eventID = " . $match->eventID 
         ]);
         $lastOdds   = $odds->getLast();
@@ -120,6 +121,7 @@ class MatchController extends ControllerBase
 
         $odds   = Odds::find([
             'distinct' => 'matchTime',
+            "order" =>    'matchTime',
             "eventID = " . $match->eventID 
         ]);
 

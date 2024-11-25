@@ -52,8 +52,9 @@ class Matchs extends \Phalcon\Mvc\Model
     {
      
         $this->setSource("matchs");
-        $this->hasMany('eventID', 'Odds', 'eventID', ['alias' => 'Odds','reusable' => true]);
-        $this->hasMany('eventID', 'Stats', 'eventID', ['alias' => 'Stats','reusable' => true]);
+        $this->hasMany('eventID', 'Odds', 'eventID', ['alias' => 'Odds','reusable' => true,   
+        'params' => ['order' => 'matchTime ASC']]);
+        $this->hasMany('eventID', 'Stats', 'eventID', ['alias' => 'Stats','reusable' => true,'params' => ['order' => 'matchTime ASC']]);
     }
 
     public static function dateMatchs($date)
